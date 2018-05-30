@@ -14,7 +14,7 @@ if [ -z "$destination" ]; then
   echo "usage: $0 <path/to/destination>" >&2
   exit 1
 fi
-
+ls -la
 # for jq
 PATH=/usr/local/bin:$PATH
 
