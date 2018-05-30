@@ -19,6 +19,12 @@ ENV JFROG_CLI_OFFER_CONFIG false
 
 RUN apk --no-cache add openssl
 
+ADD scripts/install_git_lfs.sh install_git_lfs.sh
+RUN ./install_git_lfs.sh && rm ./install_git_lfs.sh
+
+ADD scripts/install_git_crypt.sh install_git_crypt.sh
+RUN ./install_git_crypt.sh && rm ./install_git_crypt.sh
+
 ADD assets/ /opt/resource/
 
 RUN chmod +x /opt/resource/*
