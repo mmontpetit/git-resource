@@ -31,7 +31,8 @@ configure_credentials $payload
 uri=$(jq -r '.source.uri // ""' < $payload)
 branch=$(jq -r '.source.branch // ""' < $payload)
 git_config_payload=$(jq -r '.source.git_config // []' < $payload)
-ref=$(jq -r '.version.ref // "HEAD"' < $payload)
+#ref=$(jq -r '.source.ref // "HEAD"' < $payload)
+ref=`cat pipeline-config/resource-ref`
 depth=$(jq -r '(.params.depth // 0)' < $payload)
 fetch=$(jq -r '(.params.fetch // [])[]' < $payload)
 submodules=$(jq -r '(.params.submodules // "all")' < $payload)
