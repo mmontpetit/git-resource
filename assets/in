@@ -18,7 +18,7 @@ fi
 # for jq
 PATH=/usr/local/bin:$PATH
 
-payload=$(mktemp $TMPDIR/echo-resource-request.XXXXXX)
+payload=$(mktemp $TMPDIR/git-resource-request.XXXXXX)
 
 cat > $payload <&0
 
@@ -59,7 +59,7 @@ depthflag=""
 if test "$depth" -gt 0 2> /dev/null; then
   depthflag="--depth $depth"
 fi
-
+echo "git clone --single-branch $depthflag $uri $branchflag $destination"
 git clone --single-branch $depthflag $uri $branchflag $destination
 
 cd $destination
