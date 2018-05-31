@@ -61,6 +61,7 @@ depthflag=""
 if test "$depth" -gt 0 2> /dev/null; then
   depthflag="--depth $depth"
 fi
+ref=`cat trigger-prod-pipeline/resource-ref`
 echo "$ref"
 echo "git clone --single-branch $depthflag $uri $branchflag $destination"
 git clone --single-branch $depthflag $uri $branchflag $destination
