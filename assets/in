@@ -14,7 +14,7 @@ if [ -z "$destination" ]; then
   echo "usage: $0 <path/to/destination>" >&2
   exit 1
 fi
-ls -la
+ls -la $REF_PATH
 # for jq
 PATH=/usr/local/bin:$PATH
 
@@ -31,8 +31,8 @@ configure_credentials $payload
 uri=$(jq -r '.source.uri // ""' < $payload)
 branch=$(jq -r '.source.branch // ""' < $payload)
 git_config_payload=$(jq -r '.source.git_config // []' < $payload)
-#ref=$(jq -r '.source.ref // "HEAD"' < $payload)
-ref=`cat pipeline-config/resource-ref`
+ref=$(jq -r '.version.ref // "HEAD"' < $payload)
+#ref=`cat pipeline-config/resource-ref`
 depth=$(jq -r '(.params.depth // 0)' < $payload)
 fetch=$(jq -r '(.params.fetch // [])[]' < $payload)
 submodules=$(jq -r '(.params.submodules // "all")' < $payload)
