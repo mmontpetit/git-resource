@@ -153,3 +153,10 @@ load_git_crypt_key() {
       cat $git_crypt_tmp_key_path | tr ' ' '\n' | base64 -d > $GIT_CRYPT_KEY_PATH
   fi
 }
+
+check_version() {
+  local dateVersionFormat="%Y%m%d%H%S"
+  local dateString=$(date +"$dateVersionFormat")
+
+  echo "{\"version\":\"$dateString\"}" | jq --slurp .
+}
