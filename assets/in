@@ -14,8 +14,7 @@ if [ -z "$destination" ]; then
   echo "usage: $0 <path/to/destination>" >&2
   exit 1
 fi
-git clone https://github.com/mmontpetit/trigger-prod-pipeline.git 
-ls -la 
+
 # for jq
 PATH=/usr/local/bin:$PATH
 
@@ -32,8 +31,8 @@ configure_credentials $payload
 uri=$(jq -r '.source.uri // ""' < $payload)
 branch=$(jq -r '.source.branch // ""' < $payload)
 git_config_payload=$(jq -r '.source.git_config // []' < $payload)
-#ref=$(jq -r '.version.ref // "HEAD"' < $payload)
-ref=$(jq -r '.source.ref // "HEAD"' < $payload)
+uri_config=$(jq -r '.source.uri_config // []' < $payload)
+config_file=$(jq -r '.source.git_config // []' < $payload)
 depth=$(jq -r '(.params.depth // 0)' < $payload)
 fetch=$(jq -r '(.params.fetch // [])[]' < $payload)
 submodules=$(jq -r '(.params.submodules // "all")' < $payload)
@@ -43,6 +42,9 @@ commit_verification_key_ids=$(jq -r '(.source.commit_verification_key_ids // [])
 commit_verification_keys=$(jq -r '(.source.commit_verification_keys // [])[]' < $payload)
 gpg_keyserver=$(jq -r '.source.gpg_keyserver // "hkp://ipv4.pool.sks-keyservers.net/"' < $payload)
 clean_tags=$(jq -r '(.params.clean_tags // false)' < $payload)
+
+git clone $uri_config
+ref=`cat $config_file`
 
 configure_git_global "${git_config_payload}"
 
@@ -61,9 +63,8 @@ depthflag=""
 if test "$depth" -gt 0 2> /dev/null; then
   depthflag="--depth $depth"
 fi
-ref=`cat trigger-prod-pipeline/resource-ref`
+
 echo "$ref"
-echo "git clone --single-branch $depthflag $uri $branchflag $destination"
 git clone --single-branch $depthflag $uri $branchflag $destination
 
 cd $destination
