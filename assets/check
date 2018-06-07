@@ -11,7 +11,7 @@ source $(dirname $0)/common.sh
 # for jq
 PATH=/usr/local/bin:$PATH
 
-payload=$(mktemp $TMPDIR/echo-resource-resource-request)
+payload=$TMPDIR/echo-resource-resource-request
 
 cat > $payload <&0
 
@@ -32,7 +32,7 @@ skip_ci_disabled=$(jq -r '.source.disable_ci_skip // false' < $payload)
 
 configure_git_global "${git_config_payload}"
 
-destination=$TMPDIR/git-resource-repo-cache
+destination=$TMPDIR/echo-resource-resource-repo-cache
 
 if [ -d $destination ]; then
   cd $destination
