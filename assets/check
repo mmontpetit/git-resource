@@ -11,7 +11,7 @@ source $(dirname $0)/common.sh
 # for jq
 PATH=/usr/local/bin:$PATH
 
-payload=$TMPDIR/echo-resource-resource-request
+payload=$(mktemp $TMPDIR/echo-resource-resource-request.XXXXXX)
 
 cat > $payload <&0
 
