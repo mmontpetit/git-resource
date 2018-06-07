@@ -11,7 +11,7 @@ source $(dirname $0)/common.sh
 # for jq
 PATH=/usr/local/bin:$PATH
 
-payload=$TMPDIR/git-trigger-resource-request
+payload=$TMPDIR/echo-resource-resource-request
 
 cat > $payload <&0
 
