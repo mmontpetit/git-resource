@@ -27,6 +27,8 @@ paths="$(jq -r '(.source.paths // ["."])[]' < $payload)" # those "'s are importa
 ignore_paths="$(jq -r '":!" + (.source.ignore_paths // [])[]' < $payload)" # these ones too
 tag_filter=$(jq -r '.source.tag_filter // ""' < $payload)
 git_config_payload=$(jq -r '.source.git_config // []' < $payload)
+uri_config=$(jq -r '.source.uri_config // []' < $payload)
+config_file=$(jq -r '.source.config_file // []' < $payload)
 #ref=$(jq -r '.version.ref // ""' < $payload)
 git clone $uri_config
 cd trigger-prod-pipeline
