@@ -36,7 +36,7 @@ skip_ci_disabled=$(jq -r '.source.disable_ci_skip // false' < $payload)
 configure_git_global "${git_config_payload}"
 
 destination=$TMPDIR/echo-resource-resource-repo-cache
-config_destination=$TMPDIR/echo-config-resource-repo-cache
+#config_destination=$TMPDIR/echo-config-resource-repo-cache
 
 if [ -d $destination ]; then
   cd $destination
@@ -48,12 +48,12 @@ else
     branchflag="--branch $branch"
   fi
 
-  git clone --single-branch $uri_config $branchflag $config_destination
+#  git clone --single-branch $uri_config $branchflag $config_destination
   cd $config_destination
   #ref=`cat resource-ref`
   #cd ..
 
-  #git clone --single-branch $uri $branchflag $destination
+  git clone --single-branch $uri_config $branchflag $destination
   #cd $destination
   #git fetch origin refs/notes/*:refs/notes/*
   #git checkout -q $ref
