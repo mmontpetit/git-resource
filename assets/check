@@ -50,13 +50,13 @@ else
 
   git clone --single-branch $uri_config $branchflag $config_destination
   cd $config_destination
-  ref=`cat resource-ref`
-  cd ..
+  #ref=`cat resource-ref`
+  #cd ..
 
-  git clone --single-branch $uri $branchflag $destination
-  cd $destination
-  git fetch origin refs/notes/*:refs/notes/*
-  git checkout -q $ref
+  #git clone --single-branch $uri $branchflag $destination
+  #cd $destination
+  #git fetch origin refs/notes/*:refs/notes/*
+  #git checkout -q $ref
 
 fi
 
