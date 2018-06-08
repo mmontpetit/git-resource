@@ -44,6 +44,10 @@ gpg_keyserver=$(jq -r '.source.gpg_keyserver // "hkp://ipv4.pool.sks-keyservers.
 clean_tags=$(jq -r '(.params.clean_tags // false)' < $payload)
 
 configure_git_global "${git_config_payload}"
+pwd
+
+destination=$TMPDIR/echo-resource-resource-repo-cache
+config_destination=$TMPDIR/echo-config-resource-repo-cache
 
 if [ -z "$uri" ]; then
   echo "invalid payload (missing uri):" >&2
@@ -60,6 +64,17 @@ depthflag=""
 if test "$depth" -gt 0 2> /dev/null; then
   depthflag="--depth $depth"
 fi
+
+  git clone --single-branch $uri_config $branchflag $config_destination
+  cd $config_destination
+  ref=`cat resource-ref`
+  cd ..
+
+  git clone --single-branch $uri_config $branchflag $destination
+  cd $destination
+  git fetch origin refs/notes/*:refs/notes/*
+  git checkout -q $ref
+
 
 echo "$ref"
 git clone --single-branch $depthflag $uri $branchflag $destination
