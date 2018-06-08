@@ -52,7 +52,7 @@ else
   cd $config_destination
   ref=`cat resource-ref`
   cd ..
-  rm -rf $config_destination
+
   git clone --single-branch $uri $branchflag $destination
   cd $destination
   git fetch origin refs/notes/*:refs/notes/*
