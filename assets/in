@@ -17,7 +17,7 @@ fi
 
 # for jq
 PATH=/usr/local/bin:$PATH
-ls -la $TMPDIR/echo-config-resource-repo-cache
+
 payload=$(mktemp $TMPDIR/git-trigger-resource-request.XXXXXX)
 
 cat > $payload <&0
@@ -46,8 +46,6 @@ clean_tags=$(jq -r '(.params.clean_tags // false)' < $payload)
 configure_git_global "${git_config_payload}"
 pwd
 
-destination=$TMPDIR/echo-resource-resource-repo-cache
-config_destination=$TMPDIR/echo-config-resource-repo-cache
 
 if [ -z "$uri" ]; then
   echo "invalid payload (missing uri):" >&2
@@ -65,8 +63,8 @@ if test "$depth" -gt 0 2> /dev/null; then
   depthflag="--depth $depth"
 fi
 
-  git clone --single-branch $uri_config $branchflag $config_destination
-  cd $config_destination
+  git clone --single-branch $uri_config $branchflag git_config
+  cd git_config
   ref=`cat resource-ref`
   cd ..
 
