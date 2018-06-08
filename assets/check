@@ -29,7 +29,7 @@ tag_filter=$(jq -r '.source.tag_filter // ""' < $payload)
 git_config_payload=$(jq -r '.source.git_config // []' < $payload)
 uri_config=$(jq -r '.source.uri_config // []' < $payload)
 config_file=$(jq -r '.source.config_file // []' < $payload)
-#ref=$(jq -r '.version.ref // ""' < $payload)
+ref=$(jq -r '.version.ref // ""' < $payload)
 
 skip_ci_disabled=$(jq -r '.source.disable_ci_skip // false' < $payload)
 

@@ -43,13 +43,6 @@ commit_verification_keys=$(jq -r '(.source.commit_verification_keys // [])[]' < 
 gpg_keyserver=$(jq -r '.source.gpg_keyserver // "hkp://ipv4.pool.sks-keyservers.net/"' < $payload)
 clean_tags=$(jq -r '(.params.clean_tags // false)' < $payload)
 
-
-git clone $uri_config
-cd trigger-prod-pipeline
-git status
-cd ..
-ref=`cat $config_file`
-
 configure_git_global "${git_config_payload}"
 
 if [ -z "$uri" ]; then
