@@ -73,15 +73,6 @@ fi
   git fetch origin refs/notes/*:refs/notes/*
   git checkout -q $ref
 
-
-echo "$ref"
-git clone --single-branch $depthflag $uri $branchflag $destination
-
-cd $destination
-
-git fetch origin refs/notes/*:refs/notes/*
-git checkout -q $ref
-
 invalid_key() {
   echo "Invalid GPG key in: ${commit_verification_keys}"
   exit 2
