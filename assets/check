@@ -23,8 +23,14 @@ if [ -n "$branch" ]; then
   branchflag="--branch $branch"
 fi
 
-destination=$TMPDIR/echo-resource-resource-repo-cache
-cd $config_destination
-git clone --single-branch $uri_config $branchflag $destination
+if [ -d $destination ]; then
+  cd $destination
+  git fetch
+  git reset --hard FETCH_HEAD
+else
+  destination=$TMPDIR/echo-resource-resource-repo-cache
+  cd $config_destination
+  git clone --single-branch $uri_config $branchflag $destination
+fi
 
 check_version >&3
