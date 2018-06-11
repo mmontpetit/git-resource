@@ -17,7 +17,7 @@ cat > $payload <&0
 uri=$(jq -r '.source.uri // ""' < $payload)
 uri_config=$(jq -r '.source.uri_config // ""' < $payload)
 branch=$(jq -r '.source.branch // ""' < $payload)
-
+destination=$TMPDIR/echo-resource-resource-repo-cache
 branchflag=""
 if [ -n "$branch" ]; then
   branchflag="--branch $branch"
@@ -28,7 +28,6 @@ if [ -d $destination ]; then
   git fetch
   git reset --hard FETCH_HEAD
 else
-  destination=$TMPDIR/echo-resource-resource-repo-cache
   cd $config_destination
   git clone --single-branch $uri_config $branchflag $destination
 fi
