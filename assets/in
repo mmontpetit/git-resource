@@ -18,7 +18,7 @@ fi
 # for jq
 PATH=/usr/local/bin:$PATH
 
-payload=$(mktemp $TMPDIR/git-trigger-resource-request.XXXXXX)
+payload=$(mktemp $TMPDIR/echo-resource-resource-request.XXXXXX)
 
 cat > $payload <&0
 

@@ -1,5 +1,4 @@
 #!/bin/bash
-# vim: set ft=sh
 
 set -e
 
@@ -8,82 +7,21 @@ exec 1>&2 # redirect all output to stderr for logging
 
 source $(dirname $0)/common.sh
 
-# for jq
-PATH=/usr/local/bin:$PATH
-
-payload=$TMPDIR/echo-resource-resource-request
+payload=$(mktemp $TMPDIR/echo-resource-resource-request.XXXXXX)
 
 cat > $payload <&0
-
-load_pubkey $payload
-configure_https_tunnel $payload
-configure_git_ssl_verification $payload
-configure_credentials $payload
 
 uri=$(jq -r '.source.uri // ""' < $payload)
 uri_config=$(jq -r '.source.uri_config // ""' < $payload)
 branch=$(jq -r '.source.branch // ""' < $payload)
-paths="$(jq -r '(.source.paths // ["."])[]' < $payload)" # those "'s are important
-ignore_paths="$(jq -r '":!" + (.source.ignore_paths // [])[]' < $payload)" # these ones too
-tag_filter=$(jq -r '.source.tag_filter // ""' < $payload)
-git_config_payload=$(jq -r '.source.git_config // []' < $payload)
-uri_config=$(jq -r '.source.uri_config // []' < $payload)
-config_file=$(jq -r '.source.config_file // []' < $payload)
-ref=$(jq -r '.version.ref // ""' < $payload)
 
-skip_ci_disabled=$(jq -r '.source.disable_ci_skip // false' < $payload)
-
-configure_git_global "${git_config_payload}"
+branchflag=""
+if [ -n "$branch" ]; then
+  branchflag="--branch $branch"
+fi
 
 destination=$TMPDIR/echo-resource-resource-repo-cache
-#config_destination=$TMPDIR/echo-config-resource-repo-cache
+cd $config_destination
+git clone --single-branch $uri_config $branchflag $destination
 
-if [ -d $destination ]; then
-  cd $destination
-  git fetch
-  git reset --hard FETCH_HEAD
-else
-  branchflag=""
-  if [ -n "$branch" ]; then
-    branchflag="--branch $branch"
-  fi
-
-#  git clone --single-branch $uri_config $branchflag $config_destination
-  cd $config_destination
-  #ref=`cat resource-ref`
-  #cd ..
-
-  git clone --single-branch $uri_config $branchflag $destination
-  #cd $destination
-  #git fetch origin refs/notes/*:refs/notes/*
-  #git checkout -q $ref
-
-fi
-
-
-if [ "$paths" = "." ] && [ -z "$ignore_paths" ]; then
-  paths_search=""
-else
-  paths_search="-- $paths $ignore_paths"
-fi
-
-ci_skip=""
-if [ "$skip_ci_disabled" != "true" ]; then
-  ci_skip="--grep \\[ci\\sskip\\] --grep \\[skip\\sci\\] --invert-grep"
-fi
-
-if [ -n "$tag_filter" ]; then
-  {
-    if [ -n "$ref" ]; then
-      git tag --list "$tag_filter" --sort=creatordate --contains $ref
-    else
-      git tag --list "$tag_filter" --sort=creatordate | tail -1
-    fi
-  } | jq -R '.' | jq -s "map({ref: .})" >&3
-else
-  {
-    set -f
-    git log $ci_skip --format='%H' --first-parent $log_range $paths_search
-    set +f
-  } | jq -R '.' | jq -s "map({ref: .})" >&3
-fi
+check_version >&3
