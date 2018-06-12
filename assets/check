@@ -17,7 +17,7 @@ cat > $payload <&0
 uri=$(jq -r '.source.uri // ""' < $payload)
 uri_config=$(jq -r '.source.uri_config // ""' < $payload)
 branch=$(jq -r '.source.branch // ""' < $payload)
-destination=$TMPDIR/echo-resource-resource-repo-cache
+destination=$TMPDIR/echo-resource-resource-request
 branchflag=""
 if [ -n "$branch" ]; then
   branchflag="--branch $branch"
