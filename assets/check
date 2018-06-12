@@ -36,4 +36,4 @@ fi
 
 git_hash=$(git rev-parse HEAD | jq -R .)
 
-check_version >&3
+echo "{\"version\":\"$git_hash\"}" | jq --slurp . >&3
