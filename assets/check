@@ -25,10 +25,9 @@ if [ -n "$branch" ]; then
 fi
 
 if [ -d $destination ]; then
-  ls $TMPDIR
-  # cd $destination
-  # git fetch
-  # git reset --hard FETCH_HEAD
+  cd $destination
+  git fetch
+  git reset --hard FETCH_HEAD
 else
   
   git clone --single-branch $uri_config $branchflag $destination
