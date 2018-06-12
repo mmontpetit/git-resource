@@ -20,16 +20,20 @@ branch=$(jq -r '.source.branch // ""' < $payload)
 destination=$TMPDIR/echo-resource-resource-repo-cache
 
 branchflag=""
+git_hash=""
 if [ -n "$branch" ]; then
   branchflag="--branch $branch"
 fi
 
 if [ -d $destination ]; then
-  rm -rf $destination
-  git clone --single-branch $uri_config $branchflag $destination
+  cd $destination
+  git fetch origin
+  git reset --hard origin/master
 else
-  
   git clone --single-branch $uri_config $branchflag $destination
+  cd $destination
 fi
+
+git_hash=$(git rev-parse HEAD | jq -R .)
 
 check_version >&3
