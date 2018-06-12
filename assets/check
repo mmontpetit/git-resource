@@ -10,26 +10,33 @@ source $(dirname $0)/common.sh
 # for jq
 PATH=/usr/local/bin:$PATH
 
-payload=$(mktemp $TMPDIR/echo-resource-resource-request.XXXXXX)
+payload=$TMPDIR/echo-resource-resource-request
 
 cat > $payload <&0
 
 uri=$(jq -r '.source.uri // ""' < $payload)
 uri_config=$(jq -r '.source.uri_config // ""' < $payload)
 branch=$(jq -r '.source.branch // ""' < $payload)
+ignore_paths="$(jq -r '":!" + (.source.ignore_paths // [])[]' < $payload)" # these ones too
+tag_filter=$(jq -r '.source.tag_filter // ""' < $payload)
+git_config_payload=$(jq -r '.source.git_config // []' < $payload)
+ref=$(jq -r '.version.ref // ""' < $payload)
+skip_ci_disabled=$(jq -r '.source.disable_ci_skip // false' < $payload)
+
+configure_git_global "${git_config_payload}"
+
 destination=$TMPDIR/echo-resource-resource-repo-cache
 
 branchflag=""
 git_hash=""
-if [ -n "$branch" ]; then
-  branchflag="--branch $branch"
-fi
-
 if [ -d $destination ]; then
   cd $destination
-  git fetch origin
-  git reset --hard origin/master
+  git fetch
+  git reset --hard FETCH_HEAD
 else
+  if [ -n "$branch" ]; then
+    branchflag="--branch $branch"
+  fi
   git clone --single-branch $uri_config $branchflag $destination
   cd $destination
 fi
