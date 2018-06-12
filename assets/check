@@ -10,7 +10,7 @@ source $(dirname $0)/common.sh
 # for jq
 PATH=/usr/local/bin:$PATH
 
-payload=$(mktemp $TMPDIR/echo-resource-resource-request)
+payload=$TMPDIR/echo-resource-resource-request
 
 cat > $payload <&0
 
@@ -26,7 +26,7 @@ fi
 if [ -d $destination ]; then
   cd $destination
   git fetch
-  git reset --hard FETCH_HEAD
+  # git reset --hard FETCH_HEAD
 else
   cd $destination
   git clone --single-branch $uri_config $branchflag $destination
