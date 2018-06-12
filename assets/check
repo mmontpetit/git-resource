@@ -30,6 +30,7 @@ if [ -d $destination ]; then
 else
   cd $config_destination
   git clone --single-branch $uri_config $branchflag $destination
+  cd ..
 fi
 
 check_version >&3
