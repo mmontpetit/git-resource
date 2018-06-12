@@ -17,20 +17,21 @@ cat > $payload <&0
 uri=$(jq -r '.source.uri // ""' < $payload)
 uri_config=$(jq -r '.source.uri_config // ""' < $payload)
 branch=$(jq -r '.source.branch // ""' < $payload)
-# destination=$TMPDIR/echo-resource-resource-request
+destination=$TMPDIR/echo-resource-resource-repo-cache
 
 branchflag=""
 if [ -n "$branch" ]; then
   branchflag="--branch $branch"
 fi
 
-if [ -d $payload ]; then
+if [ -d $destination ]; then
   ls $TMPDIR
-  #cd  $destination
+  # cd $destination
   # git fetch
   # git reset --hard FETCH_HEAD
 else
-  git clone --single-branch $uri_config $branchflag $payload/cache
+  
+  git clone --single-branch $uri_config $branchflag $destination
 fi
 
 check_version >&3
