@@ -18,7 +18,7 @@ fi
 # for jq
 PATH=/usr/local/bin:$PATH
 
-payload=$(mktemp $TMPDIR/echo-resource-resource-request.XXXXXX)
+payload=$(mktemp $TMPDIR/qlik-git-resource-request.XXXXXX)
 
 cat > $payload <&0
 
@@ -44,8 +44,6 @@ gpg_keyserver=$(jq -r '.source.gpg_keyserver // "hkp://ipv4.pool.sks-keyservers.
 clean_tags=$(jq -r '(.params.clean_tags // false)' < $payload)
 
 configure_git_global "${git_config_payload}"
-pwd
-
 
 if [ -z "$uri" ]; then
   echo "invalid payload (missing uri):" >&2
