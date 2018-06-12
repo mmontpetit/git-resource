@@ -30,7 +30,7 @@ if [ -d $payload ]; then
   # git fetch
   # git reset --hard FETCH_HEAD
 else
-  git clone --single-branch $uri_config $branchflag $payload
+  git clone --single-branch $uri_config $branchflag $payload/cache
 fi
 
 check_version >&3
